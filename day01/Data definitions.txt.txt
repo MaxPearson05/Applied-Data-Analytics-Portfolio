@@ -1,0 +1,24 @@
+Definitions
+Dataset - structured collection of related records
+Observation - what a singular row represents (horizontal)
+Variable - type of characteristic that is stored within a column
+Data type - value type such as text, number or date
+Raw data - original information before alteration 
+Clean data - consistently structured data that is ready for analysis
+Duplicate - a repeated record that may represent the same observations
+Missing values - information that is absent and not necessarily 0
+Reconciliation - confirming that results still agree after transformation
+Data grain - precise meaning of one row (horizontal)
+
+Blank means unknown or absent
+Zero is a recorded numerical value
+- they are not interchangeable
+
+One row represents observation or transaction
+One column represents one variable
+Every column needs a clear and unique header
+Avoid blank rows and columns inside the dataset
+Avoid merging cells
+Totals should not be embedded beneath raw data
+Raw values should not be silently overwritten
+Excel tables automatically expand, filter and carry f
