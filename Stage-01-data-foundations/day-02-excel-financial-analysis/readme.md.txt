@@ -1,4 +1,4 @@
-# Day 02 – Excel Tables, Formulas and Controls
+Day 02 – Excel Tables, Formulas and Controls
 
 ## Deliverable
 Day02_Excel_Financial_Analysis.xlsx
@@ -19,5 +19,3 @@ Day02_Excel_Financial_Analysis.xlsx
 - Corrected dropdowns that were treating “List” as a single option. 
 - Connected country and product dropdowns to named ranges. - Added Source Row ID validation and XLOOKUP error handling. 
 - Reconciled 700 rows, total sales, total profit and date boundaries. 
-
-## Interview talking point Built an auditable Excel financial analysis using a 700-row Microsoft sample dataset. The workbook includes structured tables, calculated fields, QA controls, named dropdowns, conditional calculations and an interactive control panel. 
