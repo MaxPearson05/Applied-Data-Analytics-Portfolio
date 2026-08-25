@@ -1,0 +1,9 @@
+Definitions:
+
+Table Grain: level of detail or "resolution" that each row in a table represents
+Primary Key: column or set of columns whose values uniquely identify each row in a table
+Foreign Key: column in one table that references the primary key of another table to  create a relationship
+Fact Table: A table that stores measurable, quantitative data linked to related descriptive information through keys
+Dimension Table: A table that contains descriptive attributes used to filter, group and label facts
+One-to-many Cardinality: a relationship where one record in a table can be linked to multiple records in another table
+Why Dimension keys must be unique: uniqueness ensures each dimension record can be referenced without ambiguity, preserving data integrity in joins
