@@ -1,8 +1,8 @@
-\# Day 1 – Project Setup
+# Day 1 – Project Setup
 
 
 
-\## Overview
+## Overview
 
 
 
@@ -14,7 +14,7 @@ Imported and reviewed the dataset structure. Organised the workbook into clear w
 
 
 
-\## Key takeaway
+## Key takeaway
 
 
 
