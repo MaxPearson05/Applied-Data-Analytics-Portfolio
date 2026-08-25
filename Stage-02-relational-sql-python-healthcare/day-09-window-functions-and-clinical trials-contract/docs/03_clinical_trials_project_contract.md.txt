@@ -1,0 +1,83 @@
+# Clinical Trials Analytics Project Contract
+
+## Project scope
+
+Analyse industry-led interventional clinical trials involving DRUG or BIOLOGICAL interventions from 2015 onwards.
+
+The analysis will use a global cohort while applying a UK lens to understand the UK's position within international clinical-trial activity.
+
+## Stakeholder
+
+Clinical Portfolio Strategy / Business Development team within a UK-based pharmaceutical or biotechnology company.
+
+## Decisions supported
+
+The analysis should help the stakeholder:
+
+- Understand how industry-sponsored clinical-trial activity has changed since 2015.
+- Identify which countries host the greatest volume of industry trials.
+- Assess the UK's position relative to other major trial locations.
+- Identify therapeutic areas and intervention types attracting the most industry activity.
+- Understand the distribution of trials across clinical phases.
+- Identify major industry sponsors and their areas of activity.
+- Evaluate the extent to which UK facilities participate in globally sponsored trials.
+
+## Analytical questions
+
+1. How has the number of industry-led interventional DRUG/BIOLOGICAL studies changed since 2015?
+
+2. Which countries host the greatest number of these studies?
+
+3. How does the UK compare with other major countries in terms of trial activity?
+
+4. Which conditions or therapeutic areas have attracted the greatest volume of industry-sponsored research?
+
+5. What is the distribution of studies across Phase 1, Phase 2, Phase 3 and Phase 4?
+
+6. Which industry sponsors are responsible for the greatest number of studies?
+
+7. Which UK facilities appear most frequently in the selected trial cohort?
+
+8. What proportion of global studies in the cohort include at least one UK location?
+
+## Inclusion criteria
+
+Include studies that:
+
+- Have a study type of INTERVENTIONAL.
+- Have at least one DRUG or BIOLOGICAL intervention.
+- Are industry-led / have an INDUSTRY lead sponsor.
+- Have a study start date from 1 January 2015 onwards.
+- Are publicly available through ClinicalTrials.gov / AACT.
+- May be conducted in any country.
+
+## Exclusion criteria
+
+Exclude:
+
+- Observational studies.
+- Expanded-access records where they do not meet the interventional cohort definition.
+- Studies without a DRUG or BIOLOGICAL intervention.
+- Studies whose lead sponsor is not classified as INDUSTRY.
+- Studies starting before 1 January 2015.
+- Records that cannot be reliably assigned to the required study cohort because essential filtering fields are missing.
+
+## Time scope
+
+Start date: 1 January 2015
+
+End date: Data available at the chosen extraction date.
+
+## Geographic scope
+
+Global.
+
+A separate UK lens will be applied using study facilities and country/location data.
+
+## Extract date
+
+25 August 2026
+
+## Important Distinction
+
+Unit of analysis is primarily the study, so if one trial has 5 conditions, 3 interventions and 12 facilities it is still one clinical study.

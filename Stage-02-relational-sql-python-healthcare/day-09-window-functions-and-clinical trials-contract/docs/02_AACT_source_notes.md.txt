@@ -1,0 +1,39 @@
+# AACT Source and Limitations Notes
+
+## 1. What is AACT?
+AACT stands for Aggregate Analysis of ClinicalTrials.gov. It is a public PostgreSQL relational database containing publicly available ClinicalTrials.gov protocol and results data. Its content is refreshed daily.
+
+## 2. Database structure
+`nct_id` is the main identifier used to connect study information across AACT tables. Many related tables can contain multiple rows for one study.
+
+## 3. Snapshot behaviour
+AACT creates downloadable snapshots after updates. The official downloads page provides both a PostgreSQL dump and pipe-delimited flat files. The flat-file documentation states that recent daily snapshots and permanent monthly archives are retained.
+
+## 4. Access methods
+1. Query the cloud PostgreSQL database
+2. Download a PostgreSQL database snapshot
+3. Download pipe-delimited flat files
+
+## 5. Source limitations
+- AACT reflects data submitted to ClinicalTrials.gov and therefore does not represent independently verified clinical data.
+- Current AACT contains the current public version of each study record, so historical changes are not shown in the current database.
+- Source content is largely preserved rather than cleaned by AACT, meaning missing, inconsistent or incomplete registry fields may remain.
+- Results data is not available for every registered study.
+- Many tables contain multiple records per study, meaning careless joins can duplicate study-level rows and inflate counts.
+
+## 6. Reproducibility rules
+- Record the exact extraction/snapshot date.
+- Preserve raw source files unchanged.
+- Document every inclusion/exclusion rule.
+- Document the grain of every table before joining.
+
+### Personal project rules
+- Do not commit credentials or passwords to GitHub.
+- Do not commit multi-gigabyte raw AACT downloads to the portfolio repository.
+- Store scripts and documentation in GitHub and document how the source data can be reproduced.
+
+## 7. Source acknowledgement
+CTTI asks users to acknowledge AACT when using or referencing its material:
+
+- Aggregate Analysis of ClinicalTrials.gov (AACT)
+- Clinical Trials Transformation Initiative (CTTI)

@@ -1,0 +1,35 @@
+# ClinicalTrials.gov API v2 Structure Notes
+
+## Study inspected
+
+NCT ID: NCT04280705
+
+ClinicalTrials.gov
+    ↓
+API v2
+    ↓
+/studies/NCT04280705
+    ↓
+raw JSON for that one clinical trial
+
+## Conditions
+
+`conditions` is an array of values. For this study, the condition listed is COVID-19.
+
+## Interventions
+
+`interventions` is an array of objects. This study contains Placebo and Remdesivir, with each intervention storing additional fields such as its type, name and description.
+
+## Locations
+
+`locations` is an array of objects containing multiple trial sites. Each location can contain information such as facility, city, country and geographic coordinates.
+
+## Relational modelling observation
+
+The API stores one study as a nested JSON document. Structures such as conditions, interventions and locations can contain multiple values or objects within the same study record.
+
+When converted into relational data, these nested arrays become multiple rows linked back to the same `nct_id`.
+
+This explains why AACT contains one-to-many relationships between `studies` and tables such as `conditions`, `interventions` and `facilities`.
+
+Joining multiple one-to-many child tables without controlling the grain can multiply rows and inflate study counts.

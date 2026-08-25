@@ -1,0 +1,11 @@
+Date functions: transform or extract parts of dates for filtering, grouping and comparison.
+ROW_NUMBER: unique sequential number for every row.
+RANK: tied values share a rank and create gaps.
+DENSE_RANK: tied values share a rank without creating gaps.
+LAG: accesses a previous row’s value.
+LEAD: accesses a following row’s value.
+Running total: cumulative sum from the beginning of the window to the current row.
+PARTITION BY: divides rows into groups without collapsing them.
+Window ORDER BY: controls the calculation sequence.
+GROUP BY: reduces rows into summaries.
+Window functions: retain the original row-level detail.

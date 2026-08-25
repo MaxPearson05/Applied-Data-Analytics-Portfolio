@@ -1,0 +1,34 @@
+# AACT Relationship and Grain Map
+
+## Core joining rule
+
+`studies.nct_id` identifies one clinical study.
+
+Every study-related AACT table contains `nct_id`, which allows records to be linked back to the corresponding study.
+
+Most AACT tables also contain an `id` primary key identifying an individual row. The `studies` table is the exception: its primary key is `nct_id`.
+
+| Table | Grain | Primary key | Link to study | Relationship from studies |
+|---|---|---|---|---|
+| studies | One row per clinical study | nct_id | — | — |
+| sponsors | One row per sponsor/collaborator associated with a study | id | nct_id | One-to-many |
+| interventions | One row per intervention associated with a study | id | nct_id | One-to-many |
+| conditions | One row per condition associated with a study | id | nct_id | One-to-many |
+| facilities | One row per study facility/site | id | nct_id | One-to-many |
+| countries | One row per country associated with a study | id | nct_id | One-to-many |
+| calculated_values | One calculated-values row per study | id | nct_id | One-to-one |
+| study_references | One row per publication/reference associated with a study | id | nct_id | One-to-many |
+
+
+## Join-risk rule
+
+The analytical grain must be decided before joining one-to-many tables.
+
+Joining multiple child tables directly to `studies` can create row multiplication because each child table may contain several records for the same `nct_id`.
+
+For study-level metrics, I should either:
+
+- aggregate child tables to one row per `nct_id` before joining;
+- use `EXISTS` where I only need to test whether a characteristic is present;
+- use `COUNT(DISTINCT nct_id)` when counting studies; or
+- analyse child-table grains separately where appropriate.
