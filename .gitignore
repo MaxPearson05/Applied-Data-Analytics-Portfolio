@@ -179,3 +179,12 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+# Analytics project - raw data extracts
+**/data/raw/*.json
+
+# Keep reproducibility manifests
+!**/data/raw/*manifest*.json
+
+# Ignore temporary learning samples
+**/data/raw/*sample_trials*.csv
