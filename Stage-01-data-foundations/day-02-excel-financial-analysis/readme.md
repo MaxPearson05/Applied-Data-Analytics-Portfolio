@@ -1,4 +1,4 @@
-Day 02 – Excel Tables, Formulas and Controls
+# Day 02 – Excel Tables, Formulas and Controls
 
 ## Deliverable
 Day02_Excel_Financial_Analysis.xlsx

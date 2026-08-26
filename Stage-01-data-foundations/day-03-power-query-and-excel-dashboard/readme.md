@@ -1,4 +1,4 @@
-Day 03 – Power Query and Excel Dashboard
+# Day 03 – Power Query and Excel Dashboard
 
 ## Project overview
 
