@@ -1,488 +1,268 @@
-\# Day 10 – Python, pandas \& Clinical Trials Ingestion
+# Day 10 – Python, pandas & Clinical Trials Ingestion
 
+## Overview
 
+Introduced Python and pandas fundamentals before applying them to a reproducible ingestion pipeline using real **ClinicalTrials.gov API v2** data.
 
-\## Overview
+The workflow progressed from Python fundamentals and DataFrame operations to a paginated API extraction, nested JSON normalisation, relational table design, data-quality validation and reproducible source documentation.
 
+A controlled **200-study development extract** was used to validate the pipeline before scaling to the full project cohort.
 
+---
 
-Introduced Python and pandas fundamentals before applying them to a reproducible ingestion pipeline using real \*\*ClinicalTrials.gov API v2\*\* data.
-
-
-
-The work progressed from basic Python and DataFrame operations to a paginated API extraction, nested JSON normalisation, relational table design, data-quality validation and reproducible source documentation.
-
-
-
-A controlled \*\*200-study development extract\*\* was used to validate the pipeline before scaling to the full project cohort.
-
-
-
-\## Python Fundamentals
-
-
+## Python Fundamentals
 
 Covered:
 
-
-
-\* Variables and core data types
-
-\* Lists, tuples, sets and dictionaries
-
-\* Conditional logic
-
-\* Loops
-
-\* Functions
-
-\* Imports
-
-\* Exception handling
-
-\* Environment variables
-
-
+- Variables and data types
+- Lists, tuples, sets and dictionaries
+- Conditional logic
+- Loops
+- Functions
+- Imports
+- Exception handling
+- Environment variables
 
 These concepts were then applied directly to the clinical-trials ingestion workflow.
 
+---
 
-
-\## pandas Fundamentals
-
-
+## pandas Fundamentals
 
 Practised:
 
+- Creating DataFrames
+- `head()`, `info()` and `describe()`
+- Selecting data with `loc` and `iloc`
+- Filtering rows
+- Sorting values
+- Date conversion
+- Data-type conversion
+- `groupby()`
+- `merge()`
+- Reading CSV and JSON files
 
+---
 
-\* Creating DataFrames
-
-\* `head()`, `info()` and `describe()`
-
-\* Selecting data with `loc` and `iloc`
-
-\* Filtering rows
-
-\* Sorting values
-
-\* Date conversion
-
-\* Data-type conversion
-
-\* `groupby()`
-
-\* `merge()`
-
-\* Reading CSV and JSON files
-
-
-
-\## ClinicalTrials.gov API Ingestion
-
-
+## ClinicalTrials.gov API Ingestion
 
 Defined the project cohort as:
 
+- Interventional studies
+- Industry lead sponsors
+- Drug or biological interventions
+- Study start date from 2015 onwards
 
+The live API query identified **46,911 studies** matching the project criteria at extraction time.
 
-\* Interventional studies
+Rather than immediately processing the entire cohort, I developed and validated the ingestion pipeline using a controlled **200-study development extract**.
 
-\* Industry lead sponsors
+Pagination was implemented using the API's `nextPageToken`, with the development extract downloaded across **4 pages**.
 
-\* Drug or biological interventions
+---
 
-\* Study start date from 2015 onwards
+## Reproducibility
 
+The ingestion workflow records the information required to reproduce the extract.
 
+A manifest captures:
 
-The live API query identified approximately \*\*46,900 studies\*\* matching the project criteria at extraction time.
+- Data source
+- API endpoint
+- Project query
+- Extraction timestamp
+- Page size
+- Number of pages downloaded
+- Record count
+- Development extract limit
+- Raw source filename
+- SHA-256 file hash
 
+Raw API extracts are preserved locally while large raw files are excluded from GitHub.
 
+---
 
-Rather than immediately processing the entire cohort, I developed and validated the ingestion pipeline using a controlled \*\*200-study extract\*\*.
+## Relational Data Model
 
+The nested ClinicalTrials.gov JSON response was normalised into four analytical tables.
 
+### `trials`
 
-Pagination was implemented using the API's `nextPageToken`, with the development extract downloaded across four pages.
+**Grain:** one row per clinical study.
 
+Key fields include:
 
+- `nct_id`
+- Brief title
+- Overall status
+- Start date
+- Completion date
+- Lead sponsor
+- Sponsor class
+- Study type
+- Phase
+- Enrollment
 
-\## Reproducibility
+### `interventions`
 
+**Grain:** one row per intervention per study.
 
+Key fields include:
 
-The ingestion workflow preserves information required to reproduce the extract.
+- `nct_id`
+- Intervention type
+- Intervention name
+- Intervention description
 
+### `conditions`
 
+**Grain:** one row per condition per study.
 
-A manifest records:
+Key fields include:
 
+- `nct_id`
+- Condition
 
+### `locations`
 
-\* Source and API endpoint
+**Grain:** one row per study location.
 
-\* Project query
+Key fields include:
 
-\* Extraction timestamp
+- `nct_id`
+- Facility
+- City
+- State
+- Country
 
-\* Page size
+`nct_id` is retained as the parent key linking each child table back to the study-level table.
 
-\* Number of pages downloaded
+---
 
-\* Record count
-
-\* Development extract limit
-
-\* Raw source filename
-
-\* SHA-256 file hash
-
-
-
-Raw API data is preserved locally while large raw extracts are excluded from GitHub.
-
-
-
-\## Relational Data Model
-
-
-
-The nested ClinicalTrials.gov JSON response was normalised into four analytical tables:
-
-
-
-\### `trials`
-
-
-
-\*\*Grain:\*\* one row per clinical study.
-
-
-
-Contains study-level fields including:
-
-
-
-\* `nct\_id`
-
-\* Brief title
-
-\* Overall status
-
-\* Start date
-
-\* Completion date
-
-\* Lead sponsor
-
-\* Sponsor class
-
-\* Study type
-
-\* Phase
-
-\* Enrollment
-
-
-
-\### `interventions`
-
-
-
-\*\*Grain:\*\* one row per intervention per study.
-
-
-
-Contains:
-
-
-
-\* `nct\_id`
-
-\* Intervention type
-
-\* Intervention name
-
-\* Intervention description
-
-
-
-\### `conditions`
-
-
-
-\*\*Grain:\*\* one row per condition per study.
-
-
-
-Contains:
-
-
-
-\* `nct\_id`
-
-\* Condition
-
-
-
-\### `locations`
-
-
-
-\*\*Grain:\*\* one row per study location.
-
-
-
-Contains:
-
-
-
-\* `nct\_id`
-
-\* Facility
-
-\* City
-
-\* State
-
-\* Country
-
-
-
-The study-level `nct\_id` is retained as the parent key across each child table.
-
-
-
-\## Validation \& QA
-
-
+## Validation & QA
 
 The development pipeline passed structural validation checks.
 
+### Trial Table
 
+- **200 trial rows**
+- **200 unique NCT IDs**
+- **0 duplicate NCT IDs**
 
-\### Trial table
+### Child Tables
 
+- **450 intervention rows**
+- **309 condition rows**
+- **3,534 location rows**
 
+Foreign-key validation confirmed that every child-table `nct_id` maps to a valid study in the parent trial table.
 
-\* \*\*200 trial rows\*\*
+Additional validation included:
 
-\* \*\*200 unique NCT IDs\*\*
+- Missing-value profiling
+- Mixed-format date parsing
+- Study-type coverage
+- Sponsor-class coverage
+- Intervention-type coverage
+- Earliest and latest study dates
+- Processed-file existence checks
+- Full notebook restart and top-to-bottom execution
 
-\* \*\*0 duplicate NCT IDs\*\*
+---
 
+## Problems Solved
 
-
-\### Child tables
-
-
-
-\* \*\*450 intervention rows\*\*
-
-\* \*\*309 condition rows\*\*
-
-\* \*\*3,534 location rows\*\*
-
-
-
-Foreign-key validation confirmed that every child-table `nct\_id` maps to a valid study in the parent trial table.
-
-
-
-Additional checks included:
-
-
-
-\* Missing-value profiling
-
-\* Date conversion and validation
-
-\* Study-type coverage
-
-\* Sponsor-class coverage
-
-\* Intervention-type coverage
-
-\* Earliest and latest study dates
-
-\* Processed-file existence checks
-
-\* Full notebook restart and top-to-bottom execution
-
-
-
-\## Problems Solved
-
-
-
-\### Python and Jupyter environment setup
-
-
+### Python & Jupyter Environment Setup
 
 Configured Python 3.14 in VS Code and resolved interpreter, terminal and Jupyter kernel setup issues.
 
+Installed and configured the packages required for notebook-based data analysis, including:
 
+- `ipykernel`
+- `pandas`
+- `requests`
 
-Installed the packages required for notebook execution and data analysis, including `ipykernel`, pandas and requests.
-
-
-
-\### API pagination scaling
-
-
+### API Pagination Scaling
 
 An early attempt moved too quickly from a small API sample to a larger paginated extraction and caused the notebook to stall.
 
-
-
 I interrupted the request, reset the kernel state and rebuilt the process incrementally:
 
+1. Confirmed the notebook kernel was functioning correctly
+2. Validated API connectivity
+3. Tested pagination across two pages
+4. Built a controlled 200-study paginated development extract
 
+This reduced the risk of debugging transformation logic against a much larger dataset.
 
-1\. Validated the notebook kernel independently
-
-2\. Confirmed API connectivity with a single request
-
-3\. Tested pagination across two pages
-
-4\. Built a controlled 200-study paginated development extract
-
-
-
-This reduced the risk of debugging transformation logic on a much larger dataset.
-
-
-
-\### Raw JSON complexity
-
-
+### Nested JSON Normalisation
 
 ClinicalTrials.gov returns nested JSON where one study can contain multiple interventions, conditions and locations.
 
+I normalised these nested structures into separate parent and child DataFrames while retaining `nct_id` as the relationship key.
 
+### One-to-Many Relationship Validation
 
-I normalised these nested structures into separate parent and child DataFrames while retaining `nct\_id` as the relationship key.
+Child tables legitimately contain repeated `nct_id` values because one study can have multiple related records.
 
+Rather than treating these as duplicate errors, I validated the intended table grain and confirmed that all child foreign keys existed in the parent trial table.
 
+### Date Parsing
 
-\### One-to-many relationship validation
+ClinicalTrials.gov date fields can contain varying levels of precision.
 
+The date-cleaning logic was updated to handle mixed date formats rather than assuming every source value followed an identical format.
 
-
-Child tables legitimately contain repeated `nct\_id` values because one study can have multiple related records.
-
-
-
-Rather than treating these as duplicates, I validated the intended table grain and confirmed all child foreign keys existed in the parent trial table.
-
-
-
-\### Date parsing
-
-
-
-ClinicalTrials.gov date fields can contain varying levels of date precision.
-
-
-
-Date conversion was updated to handle mixed date formats rather than assuming every source value followed an identical format.
-
-
-
-\### Processed-data export
-
-
+### Processed Data Export
 
 The initial CSV export failed because the processed-data directory did not yet exist.
 
+The pipeline was updated to automatically create the required directory before exporting the analytical tables.
 
+### Notebook Reproducibility
 
-The pipeline was updated to create the required directory automatically before exporting analytical tables.
+Temporary troubleshooting cells, installation commands and superseded test transformations were removed from the final notebook.
 
+The completed workflow can be restarted and executed from top to bottom without relying on variables left in memory from previous runs.
 
+---
 
-\### Notebook reproducibility
+## Key Learning
 
+This exercise demonstrated that reliable API ingestion requires more than simply downloading records.
 
+A reproducible analytical pipeline requires:
 
-Temporary troubleshooting cells, installation commands and superseded sample transformations were removed from the final notebook.
-
-
-
-The final workflow was cleaned so it could be restarted and executed from top to bottom without relying on variables left in memory from previous runs.
-
-
-
-\## Key Learning
-
-
-
-This exercise demonstrated that API ingestion is more than simply downloading records.
-
-
-
-A reliable analytical pipeline requires:
-
-
-
-\* Clearly defined project scope
-
-\* Controlled extraction
-
-\* Pagination
-
-\* Preservation of source data
-
-\* Reproducibility metadata
-
-\* Understanding of nested structures
-
-\* Explicit table grain
-
-\* Parent-child key validation
-
-\* Missingness profiling
-
-\* Data-type validation
-
-\* Repeatable execution
-
-
+- Clearly defined project scope
+- Controlled extraction
+- Pagination
+- Preservation of source data
+- Reproducibility metadata
+- Understanding of nested data structures
+- Explicit table grain
+- Parent-child key validation
+- Missingness profiling
+- Data-type validation
+- Repeatable execution
 
 The development-first approach allowed the pipeline to be tested safely before scaling to the full clinical-trials cohort.
 
+---
 
-
-\## Evidence
-
-
+## Evidence
 
 Day 10 includes:
 
+- Python fundamentals script
+- pandas fundamentals notebook
+- ClinicalTrials.gov API ingestion notebook
+- Reproducibility manifest
+- Four processed analytical tables
+- API ingestion code screenshot
+- Final pipeline QA screenshot
 
+---
 
-\* Python fundamentals script
+## Next Step
 
-\* pandas fundamentals notebook
-
-\* ClinicalTrials.gov API ingestion notebook
-
-\* Reproducibility manifest
-
-\* Four processed analytical tables
-
-\* API ingestion code screenshot
-
-\* Final pipeline QA screenshot
-
-
-
-\## Next Step
-
-
-
-Scale the validated ingestion workflow and continue developing the \*\*Clinical Trial Portfolio \& Delivery Intelligence\*\* project through deeper profiling, SQL analysis and stakeholder-focused exploration.
-
-
-
+Scale and refine the validated ingestion workflow before continuing the **Clinical Trial Portfolio & Delivery Intelligence** project through deeper profiling, SQL analysis and stakeholder-focused exploration.
