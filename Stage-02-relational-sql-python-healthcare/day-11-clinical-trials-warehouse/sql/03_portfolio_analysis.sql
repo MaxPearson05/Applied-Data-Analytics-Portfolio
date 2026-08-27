@@ -76,7 +76,7 @@ ANALYTICAL PRINCIPLES:
 
 
 -- Query 1: Clinical-Trial activity trend by start year
--- Buisness question:
+-- Business question:
 -- How has industry-sponsored drug/biological trial activity changed since 2015?
 
 WITH trial_core AS (

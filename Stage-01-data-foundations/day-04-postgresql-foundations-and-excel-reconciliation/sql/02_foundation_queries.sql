@@ -3,7 +3,7 @@ select*
 from analytics_sprint.financials 
 limit 10;
 
---Query 2: select specific buisness fields
+--Query 2: select specific business fields
 select 
 	source_row_id,
 	date,
