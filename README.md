@@ -1,12 +1,11 @@
 # Applied Data Analytics Portfolio
 
-A practical data analytics portfolio demonstrating end-to-end analysis using real public datasets across healthcare, clinical research and financial services.
-
-The work covers data ingestion, cleaning, relational modelling, SQL analysis, Python/pandas, Power Query, Power BI, DAX, Tableau, validation and stakeholder-focused communication.
+A practical data analytics portfolio demonstrating an end-to-end analysis using real public datasets within clinical research (AACT).
+The work covers data ingestion, cleaning, relational modelling, SQL analysis, Python/pandas, Power Query, Power BI, DAX, and stakeholder-focused communication.
 
 ## Core Stack
 
-**Excel | Power Query | PostgreSQL | SQL | Python | pandas | BigQuery | Power BI | DAX | Tableau | Git/GitHub**
+**Excel | Power Query | PostgreSQL | SQL | Python | pandas | BigQuery | Power BI | DAX | Git/GitHub**
 
 ---
 
@@ -52,85 +51,6 @@ The project investigates:
 - reproducible data pipelines
 
 Particular attention is given to preventing study duplication when combining sponsors, interventions, conditions, facilities and geographic data.
-
----
-
-## Financial Conduct & Customer Outcomes
-
-A real-data financial analytics project using public datasets from the:
-
-- Financial Conduct Authority (FCA)
-- Financial Ombudsman Service (FOS)
-- Bank of England
-
-The project examines customer outcomes and financial-conduct indicators while avoiding unsupported conclusions about individual firms.
-
-### Business focus
-
-Designed for stakeholders working in financial services, risk, customer operations or conduct analytics.
-
-The analysis investigates:
-
-- complaint volumes and trends
-- complaints relative to valid customer/account denominators
-- complaint closure performance
-- upheld complaint rates
-- Financial Ombudsman outcomes
-- product concentration
-- peer comparisons
-- period-on-period changes
-- persistent deterioration indicators
-- FCA/FOS outcome differences
-- wider financial context
-
-### Technical focus
-
-- multi-source public datasets
-- PostgreSQL relational modelling
-- entity mapping and crosswalks
-- denominator design
-- SQL CTEs and window functions
-- Python/pandas validation
-- period alignment
-- Power BI
-- Tableau
-- calculated metrics
-- reconciliation and QA
-- responsible analytical interpretation
-
----
-
-# Analytical Foundations
-
-Before developing the flagship projects, the portfolio establishes core analytics skills using structured financial data.
-
-Topics include:
-
-- Excel tables and structured references
-- `SUMIFS`, `COUNTIFS` and `AVERAGEIFS`
-- `XLOOKUP`
-- dynamic arrays
-- data validation
-- weighted metrics
-- Power Query
-- PivotTables
-- KPI dashboards
-- PostgreSQL
-- filtering and aggregation
-- `CASE`
-- `GROUP BY` and `HAVING`
-- relational joins
-- CTEs and subqueries
-- date analysis
-- `ROW_NUMBER`
-- `RANK`
-- `DENSE_RANK`
-- `LAG`
-- running totals
-- rolling calculations
-- cross-tool reconciliation
-
----
 
 # Analytical Approach
 
