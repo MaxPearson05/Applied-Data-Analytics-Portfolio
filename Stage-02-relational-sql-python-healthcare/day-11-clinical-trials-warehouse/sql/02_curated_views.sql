@@ -2,21 +2,20 @@
 -- Grain: one row per nct_id
 
 WITH trial_core AS (
-
     SELECT
         s.nct_id,
         s.brief_title,
         s.overall_status,
         s.phase,
         s.start_date,
+        s.primary_completion_date,
         s.completion_date,
-        s.enrollment
-
+        s.enrollment,
+        s.why_stopped,
+        s.results_first_posted_date
     FROM ctgov.studies AS s
-
     WHERE s.study_type = 'INTERVENTIONAL'
         AND s.start_date >= DATE '2015-01-01'
-
         AND EXISTS (
             SELECT 1
             FROM ctgov.sponsors AS sp
@@ -24,7 +23,6 @@ WITH trial_core AS (
                 AND sp.lead_or_collaborator = 'lead'
                 AND sp.agency_class = 'INDUSTRY'
         )
-
         AND EXISTS (
             SELECT 1
             FROM ctgov.interventions AS i
@@ -34,7 +32,6 @@ WITH trial_core AS (
 ),
 
 lead_sponsor AS (
-
     SELECT
         sp.nct_id,
         STRING_AGG(
@@ -42,75 +39,96 @@ lead_sponsor AS (
             ' | '
             ORDER BY sp.name
         ) AS lead_sponsor
-
     FROM ctgov.sponsors AS sp
-
     WHERE sp.lead_or_collaborator = 'lead'
         AND sp.agency_class = 'INDUSTRY'
-
     GROUP BY sp.nct_id
 ),
 
 country_summary AS (
-
     SELECT
         c.nct_id,
         COUNT(DISTINCT c.name) AS country_count,
         BOOL_OR(c.name = 'United Kingdom') AS uk_participation
-
     FROM ctgov.countries AS c
-
     WHERE c.removed = FALSE
        OR c.removed IS NULL
-
     GROUP BY c.nct_id
 ),
 
 site_summary AS (
-
     SELECT
         f.nct_id,
         COUNT(DISTINCT f.id) AS site_count
-
     FROM ctgov.facilities AS f
-
     GROUP BY f.nct_id
 )
 
 SELECT
     tc.nct_id,
-    tc.brief_title,
+
+    REPLACE(
+        REPLACE(tc.brief_title, CHR(13), ' '),
+        CHR(10),
+        ' '
+    ) AS brief_title,
+
     tc.overall_status,
     tc.phase,
-
     tc.start_date,
     EXTRACT(YEAR FROM tc.start_date)::INT AS start_year,
-
+    tc.primary_completion_date,
     tc.completion_date,
+
+    CASE
+        WHEN tc.completion_date >= tc.start_date
+        THEN tc.completion_date - tc.start_date
+    END AS duration_days,
+
     tc.enrollment,
 
-    ls.lead_sponsor,
+    REPLACE(
+        REPLACE(ls.lead_sponsor, CHR(13), ' '),
+        CHR(10),
+        ' '
+    ) AS lead_sponsor,
 
     COALESCE(cs.country_count, 0) AS country_count,
     COALESCE(cs.uk_participation, FALSE) AS uk_participation,
+    COALESCE(ss.site_count, 0) AS site_count,
 
-    COALESCE(ss.site_count, 0) AS site_count
+    REPLACE(
+        REPLACE(tc.why_stopped, CHR(13), ' '),
+        CHR(10),
+        ' '
+    ) AS why_stopped,
+
+    tc.results_first_posted_date,
+
+    CASE
+        WHEN tc.results_first_posted_date IS NOT NULL THEN TRUE
+        ELSE FALSE
+    END AS results_posted,
+
+    CASE
+        WHEN tc.overall_status = 'COMPLETED'
+         AND tc.primary_completion_date IS NOT NULL
+         AND tc.primary_completion_date
+             <= (CURRENT_DATE - INTERVAL '18 months')::DATE
+        THEN TRUE
+        ELSE FALSE
+    END AS mature_results_eligible
 
 FROM trial_core AS tc
-
 LEFT JOIN lead_sponsor AS ls
     ON tc.nct_id = ls.nct_id
-
 LEFT JOIN country_summary AS cs
     ON tc.nct_id = cs.nct_id
-
 LEFT JOIN site_summary AS ss
     ON tc.nct_id = ss.nct_id
-
 ORDER BY
     tc.start_date,
     tc.nct_id;
-
 -- Result / purpose:
 -- Creates a curated trial-level analytical output at one row per nct_id.
 -- Sponsor, country and facility data are pre-aggregated before joining
